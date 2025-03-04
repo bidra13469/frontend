@@ -122,7 +122,10 @@ function AppHeader({ settings, categories, languages, currencies }) {
         }
       } else {
         setLanguage(languages[0]);
-        if (languages[0].lang_code === "ar" || languages[0].lang_code === "he") {
+        if (
+          languages[0].lang_code === "ar" ||
+          languages[0].lang_code === "he"
+        ) {
           document.body.setAttribute("dir", "rtl");
         } else {
           document.body.setAttribute("dir", "ltr");
@@ -409,10 +412,7 @@ function AppHeader({ settings, categories, languages, currencies }) {
               <nav>
                 <ul className="flex rtl:space-x-reverse space-x-[50px] items-center">
                   <li>
-                    <Link
-                      href="/products"
-                      className="text-base font-medium text-white"
-                    >
+                    <Link href="/products" className="text-base font-medium text-white">
                       <StringLang string="Shops" />
                     </Link>
                   </li>
