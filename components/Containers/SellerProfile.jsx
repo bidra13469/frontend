@@ -7,9 +7,11 @@ import PaginateObserver from "@/components/Helper/PaginateObserver";
 import { useDispatch, useSelector } from "react-redux";
 import { sellerProductPageIncrease } from "@/store/features/pagination/paginationSlice";
 import StringLang from "@/utilities/StringLang";
+import { useRouter } from "next/navigation"; // إضافة useRouter للتوجيه
 
 function SellerProfile({ datas }) {
   const dispatch = useDispatch();
+  const router = useRouter(); // إضافة التوجيه
   const page = useSelector((state) => state.pagination.sellerProductPage);
 
   const paginationHandler = () => {
@@ -19,14 +21,23 @@ function SellerProfile({ datas }) {
     page: page,
     userName: datas?.author?.user_name,
   });
+
+  // دالة التوجيه إلى صفحة تسجيل البائع مع تأكيد
+  const handleSwitchToSeller = () => {
+    if (confirm("Do you want to register as a seller?")) {
+      router.push("/auth/become-seller"); // توجيه إلى صفحة التسجيل
+    }
+  };
+
   if (datas && datas.author) {
     const { author, total_sale, total_review, average_rating } = datas;
+
     return (
       <>
         <div className="w-full mt-11 pb-[100px]">
           <div className="theme-container mx-auto">
-            <div className="w-full lg:px-[190px] ">
-              {/*Seller Profile Info*/}
+            <div className="w-full lg:px-[190px]">
+              {/* Seller Profile Info */}
               <div className="w-full bg-black px-[29px] py-10 rounded-lg mb-[30px]">
                 <div className="w-full flex md:flex-row flex-col space-y-5 md:space-y-0 md:justify-between md:items-center items-start mb-[30px]">
                   <div className="md:flex md:rtl:space-x-reverse space-x-4">
@@ -96,6 +107,15 @@ function SellerProfile({ datas }) {
                       </div>
                     </div>
                   </div>
+                  {/* إضافة زر Switch to Seller هنا */}
+                  {author.role !== "seller" && ( // عرض الزر فقط إذا لم يكن بائعًا
+                    <button
+                      onClick={handleSwitchToSeller}
+                      className="bg-primary-blue text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                    >
+                      Switch to Seller
+                    </button>
+                  )}
                 </div>
                 <div className="grid sm:grid-cols-3 grid-cols-1 gap-5 mb-[30px]">
                   <div className="w-full h-[120px] bg-[#0B0E13] flex items-center px-5 rounded-md">
@@ -208,7 +228,7 @@ function SellerProfile({ datas }) {
                           <StringLang string="Time" />
                         </p>
                         <p className="text-2xl font-semibold text-white">
-                          <StringLang string=" Instant" />
+                          <StringLang string="Instant" />
                         </p>
                       </div>
                     </div>
@@ -224,7 +244,7 @@ function SellerProfile({ datas }) {
                   }}
                 ></p>
               </div>
-              {/*products*/}
+              {/* Products */}
               <p className="text-2xl font-bold text-white mb-4">
                 <StringLang string="Seller Products" />
               </p>
@@ -261,6 +281,7 @@ function SellerProfile({ datas }) {
       </>
     );
   }
+  return null; // إذا لم تكن البيانات متاحة
 }
 
 export default SellerProfile;
